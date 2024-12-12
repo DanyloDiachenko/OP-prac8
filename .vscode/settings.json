@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "*.svg": "javascriptreact",
+        "functions.c": "cpp"
+    }
+}

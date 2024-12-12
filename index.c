@@ -6,7 +6,8 @@ int main()
 
     printf("Welcome! This program helps you calculate complex resistance of various circuits based on your input parameters.\n\n");
 
-    do {
+    do
+    {
         int circuitChoice = 0;
         double resistance = 0.0;
         double resistance1 = 0.0;
@@ -46,30 +47,35 @@ int main()
 
             switch (circuitChoice)
             {
-                case 1:
-                case 2: {
-                    impedance = getSeriesLCImpedance(resistance, inductance, capacitance, omega);
+            case 1:
+            case 2:
+            {
+                impedance = getSeriesLCImpedance(resistance, inductance, capacitance, omega);
+                break;
+            }
+
+            case 3:
+            {
+                impedance = getParallelRLImpedance(resistance1, resistance2, inductance, capacitance, omega);
+                break;
+            }
+
+            case 4:
+            {
+                impedance = getParallelRLCImpedance(resistance1, resistance2, inductance, capacitance, omega);
+                break;
+            }
+
+            default:
+            {
+                printf("Invalid circuit choice!\n");
+
+                continueProgram = askToContinue();
+                if (!continueProgram)
+                {
                     break;
                 }
-
-                case 3: {
-                    impedance = getParallelRLImpedance(resistance1, resistance2, inductance, capacitance, omega);
-                    break;
-                }
-
-                case 4: {
-                    impedance = getParallelRLCImpedance(resistance1, resistance2, inductance, capacitance, omega);
-                    break;
-                }
-
-                default: {
-                    printf("Invalid circuit choice!\n");
-
-                    continueProgram = askToContinue();
-                    if (!continueProgram) {
-                        break;
-                    }
-                }
+            }
             }
 
             printf("Frequency: %.1e\t", frequency);
@@ -81,7 +87,7 @@ int main()
 
         printf("\n");
         continueProgram = askToContinue();
-    }while(continueProgram);
+    } while (continueProgram);
 
     return 0;
 }

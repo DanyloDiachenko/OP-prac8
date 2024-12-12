@@ -70,7 +70,6 @@ Complex getParallelRLCImpedance(double resistance1, double resistance2, double i
     return divideComplexNumbers(numerator, denominator);
 }
 
-
 void getAndValidateCircuitChoice(int *circuitChoice)
 {
     do
@@ -82,30 +81,30 @@ void getAndValidateCircuitChoice(int *circuitChoice)
 
         switch (circuitChoiceInput)
         {
-            case '1':
-            {
-                *circuitChoice = 1;
-                break;
-            }
-            case '2':
-            {
-                *circuitChoice = 2;
-                break;
-            }
-            case '3':
-            {
-                *circuitChoice = 3;
-                break;
-            }
-            case '4':
-            {
-                *circuitChoice = 4;
-                break;
-            }
-            default:
-            {
-                printf("Invalid value for circuit number. Please enter '1', '2', '3' or '4'.\n");
-            }
+        case '1':
+        {
+            *circuitChoice = 1;
+            break;
+        }
+        case '2':
+        {
+            *circuitChoice = 2;
+            break;
+        }
+        case '3':
+        {
+            *circuitChoice = 3;
+            break;
+        }
+        case '4':
+        {
+            *circuitChoice = 4;
+            break;
+        }
+        default:
+        {
+            printf("Invalid value for circuit number. Please enter '1', '2', '3' or '4'.\n");
+        }
         }
     } while (*circuitChoice == 0);
 }
@@ -152,7 +151,7 @@ void getAndValidateCapacitance(double *capacitance)
     } while (*capacitance <= MIN_CAPACITANCE || *capacitance > MAX_CAPACITANCE);
 }
 
-void getAndValidateResistance(double *resistance, const char* resistanceName)
+void getAndValidateResistance(double *resistance, const char *resistanceName)
 {
     do
     {

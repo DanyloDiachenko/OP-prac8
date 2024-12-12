@@ -10,7 +10,7 @@ Complex getParallelRLCImpedance(double resistance1, double resistance2, double i
 void getAndValidateCircuitChoice(int *circuitChoice);
 void getAndValidateInductance(double *inductance);
 void getAndValidateCapacitance(double *capacitance);
-void getAndValidateResistance(double *resistance, const char* resistanceName);
+void getAndValidateResistance(double *resistance, const char *resistanceName);
 void getAndValidateFrequencyRange(double *minFrequency, double *maxFrequency);
 void getAndValidateFrequencyStep(double *frequencyStep);
 bool askToContinue();
