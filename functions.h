@@ -4,9 +4,9 @@
 complex divideComplexNumbers(complex complexNumber1, complex complexNumber2);
 void printComplexNumber(complex complexNumber);
 double getResonantFrequency(double inductance, double capacitance);
-complex getImpedance12(double resistance, double inductance, double capacitance, double omega);
-complex getImpedance3(double resistance1, double resistance2, double inductance, double capacitance, double omega);
-complex getImpedance4(double resistance1, double resistance2, double inductance, double capacitance, double omega);
+complex getSeriesLCImpedance(double resistance, double inductance, double capacitance, double omega);
+complex getParallelRLImpedance(double resistance1, double resistance2, double inductance, double capacitance, double omega);
+complex getParallelRLCImpedance(double resistance1, double resistance2, double inductance, double capacitance, double omega);
 void getAndValidateCircuitChoice(int *circuitChoice);
 void getAndValidateInductance(double *inductance);
 void getAndValidateCapacitance(double *capacitance);

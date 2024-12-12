@@ -19,7 +19,7 @@ double getResonantFrequency(double inductance, double capacitance)
     return 1.0 / (2.0 * M_PI * sqrt(inductance * capacitance));
 }
 
-complex getImpedance12(double resistance, double inductance, double capacitance, double omega)
+complex getSeriesLCImpedance(double resistance, double inductance, double capacitance, double omega)
 {
     complex numerator;
     numerator.real = inductance / capacitance;
@@ -32,7 +32,7 @@ complex getImpedance12(double resistance, double inductance, double capacitance,
     return divideComplexNumbers(numerator, denominator);
 }
 
-complex getImpedance3(double resistance1, double resistance2, double inductance, double capacitance, double omega)
+complex getParallelRLImpedance(double resistance1, double resistance2, double inductance, double capacitance, double omega)
 {
     double a = resistance1 * resistance2;
     double b = resistance1 * (omega * inductance - 1.0 / (omega * capacitance));
@@ -50,7 +50,7 @@ complex getImpedance3(double resistance1, double resistance2, double inductance,
     return divideComplexNumbers(numerator, denominator);
 }
 
-complex getImpedance4(double resistance1, double resistance2, double inductance, double capacitance, double omega)
+complex getParallelRLCImpedance(double resistance1, double resistance2, double inductance, double capacitance, double omega)
 {
     double a = resistance1 * resistance2;
     double b = omega * inductance * resistance1 - resistance2 / (omega * capacitance);
@@ -67,6 +67,7 @@ complex getImpedance4(double resistance1, double resistance2, double inductance,
 
     return divideComplexNumbers(numerator, denominator);
 }
+
 
 void getAndValidateCircuitChoice(int *circuitChoice)
 {

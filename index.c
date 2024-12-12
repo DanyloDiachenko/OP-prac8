@@ -48,17 +48,17 @@ int main()
             {
                 case 1:
                 case 2: {
-                    impedance = getImpedance12(resistance, inductance, capacitance, omega);
+                    impedance = getSeriesLCImpedance(resistance, inductance, capacitance, omega);
                     break;
                 }
 
                 case 3: {
-                    impedance = getImpedance3(resistance1, resistance2, inductance, capacitance, omega);
+                    impedance = getParallelRLImpedance(resistance1, resistance2, inductance, capacitance, omega);
                     break;
                 }
 
                 case 4: {
-                    impedance = getImpedance4(resistance1, resistance2, inductance, capacitance, omega);
+                    impedance = getParallelRLCImpedance(resistance1, resistance2, inductance, capacitance, omega);
                     break;
                 }
 
@@ -66,12 +66,9 @@ int main()
                     printf("Invalid circuit choice!\n");
 
                     continueProgram = askToContinue();
-                    if (!continueProgram)
-                    {
+                    if (!continueProgram) {
                         break;
-                    };
-
-                    continue;
+                    }
                 }
             }
 
