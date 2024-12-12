@@ -1,5 +1,7 @@
 # Prerequisites
 *.d
+index
+./idea
 
 # Object files
 *.o
