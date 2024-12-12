@@ -42,7 +42,7 @@ int main()
         do
         {
             double omega = 2.0 * M_PI * frequency;
-            complex impedance;
+            Complex impedance;
 
             switch (circuitChoice)
             {

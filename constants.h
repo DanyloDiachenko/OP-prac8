@@ -20,6 +20,6 @@ typedef struct
 {
     double real;
     double imaginary;
-} complex;
+} Complex;
 
 #endif // CONSTANTS_H

@@ -1,12 +1,12 @@
 #ifndef FUNCTIONS_H
 #define FUNCTIONS_H
 
-complex divideComplexNumbers(complex complexNumber1, complex complexNumber2);
-void printComplexNumber(complex complexNumber);
+Complex divideComplexNumbers(Complex complexNumber1, Complex complexNumber2);
+void printComplexNumber(Complex complexNumber);
 double getResonantFrequency(double inductance, double capacitance);
-complex getSeriesLCImpedance(double resistance, double inductance, double capacitance, double omega);
-complex getParallelRLImpedance(double resistance1, double resistance2, double inductance, double capacitance, double omega);
-complex getParallelRLCImpedance(double resistance1, double resistance2, double inductance, double capacitance, double omega);
+Complex getSeriesLCImpedance(double resistance, double inductance, double capacitance, double omega);
+Complex getParallelRLImpedance(double resistance1, double resistance2, double inductance, double capacitance, double omega);
+Complex getParallelRLCImpedance(double resistance1, double resistance2, double inductance, double capacitance, double omega);
 void getAndValidateCircuitChoice(int *circuitChoice);
 void getAndValidateInductance(double *inductance);
 void getAndValidateCapacitance(double *capacitance);
