@@ -1,234 +1,69 @@
-void getAndValidateEquationType(enum EquationType *equationType)
+complex divideComplexNumbers(complex complexNumber1, complex complexNumber2)
 {
-    do
-    {
-        printf("Enter the equation type to solve: '1' - 1) '2' - 2): ");
+    double complexSquare = complexNumber2.real * complexNumber2.real + complexNumber2.imaginary * complexNumber2.imaginary;
 
-        char equationTypeInput = getchar();
-        fflush(stdin);
+    complex result;
+    result.real = (complexNumber1.real * complexNumber2.real + complexNumber1.imaginary * complexNumber2.imaginary) / complexSquare;
+    result.imaginary = (complexNumber1.imaginary * complexNumber2.real - complexNumber1.real * complexNumber2.imaginary) / complexSquare;
 
-        switch (equationTypeInput)
-        {
-        case '1':
-        {
-            *equationType = TRIGONOMETRIC_FRACTIONS;
-            break;
-        }
-        case '2':
-        {
-            *equationType = TRIGONOMETRIC_LOGARITHM;
-            break;
-        }
-        default:
-        {
-            printf("Invalid value for equation type. Please enter '1' or '2'.\n");
-        }
-        }
-    } while (*equationType == 0);
+    return result;
 }
 
-void getAndValidateEquationSolvingMethod(enum SolveEquationMethod *solvingMethod)
+void printComplexNumber(complex complexNumber)
 {
-    do
-    {
-        printf("Enter the equation solving method '1' - Half Dividing, '2' - Newton method: ");
-
-        char solvingMethodInput = getchar();
-        fflush(stdin);
-
-        switch (solvingMethodInput)
-        {
-        case '1':
-        {
-            *solvingMethod = HALF_DIVIDING;
-            break;
-        }
-        case '2':
-        {
-            *solvingMethod = NEWTON;
-            break;
-        }
-        default:
-        {
-            printf("Invalid value for solving method. Please enter '1' or '2'.\n");
-        }
-        }
-    } while (*solvingMethod == 0);
+    printf("%.6e + i * %.6e", complexNumber.real, complexNumber.imaginary);
 }
 
-void getAndValidateRange(double *rangeStart, double *rangeEnd)
+double getResonantFrequency(double inductance, double capacitance)
 {
-    bool isValid = false;
-
-    do
-    {
-        printf("Enter the left range value, less than right (between %d and %d): ", MIN_RANGE_LIMIT, MAX_RANGE_LIMIT);
-        isValid = scanf("%lf", rangeStart);
-        fflush(stdin);
-
-        if (!isValid)
-        {
-            printf("Invalid input for left range value. Please enter an integer.\n");
-
-            continue;
-        }
-
-        if (*rangeStart < MIN_RANGE_LIMIT || *rangeEnd > MAX_RANGE_LIMIT)
-        {
-            printf("Left range value is out of range. Please enter a value between %d and %d.\n", MIN_RANGE_LIMIT, MAX_RANGE_LIMIT);
-
-            isValid = false;
-        }
-    } while (!isValid);
-
-    do
-    {
-        printf("Enter the right range value, greater than left (between %d and %d): ", MIN_RANGE_LIMIT, MAX_RANGE_LIMIT);
-        isValid = scanf("%lf", rangeEnd);
-        fflush(stdin);
-
-        if (!isValid)
-        {
-            printf("Invalid input for right range value. Please enter an integer.\n");
-
-            continue;
-        }
-
-        if (*rangeEnd <= *rangeStart)
-        {
-            printf("Invalid input for right range value. It must be greater than left range value.\n");
-
-            isValid = false;
-        }
-        else if (*rangeEnd < MIN_RANGE_LIMIT || *rangeEnd > MAX_RANGE_LIMIT)
-        {
-            printf("Right range value is out of range. Please enter a value between %d and %d.\n", MIN_RANGE_LIMIT, MAX_RANGE_LIMIT);
-
-            isValid = false;
-        }
-
-    } while (!isValid);
+    return 1.0 / (2.0 * M_PI * sqrt(inductance * capacitance));
 }
 
-void getAndValidateEpsilon(double *epsilon)
+complex getImpedance12(double resistance, double inductance, double capacitance, double omega)
 {
-    do
-    {
-        printf("Enter the accuracy from %.0e to %.0e (e.g., 0.0001): ", MIN_EPSILON, MAX_EPSILON);
-        if (scanf("%lf", epsilon) != 1)
-        {
-            printf("Invalid input for accuracy. Please enter a valid number.\n");
-            fflush(stdin);
+    complex numerator;
+    numerator.real = inductance / capacitance;
+    numerator.imaginary = -resistance / (omega * capacitance);
 
-            continue;
-        }
-        fflush(stdin);
+    complex denominator;
+    denominator.real = resistance;
+    denominator.imaginary = omega * inductance - 1.0 / (omega * capacitance);
 
-        if (*epsilon < MIN_EPSILON || *epsilon > MAX_EPSILON)
-        {
-            printf("Accuracy value is out of range. Please enter a value between %.0e and %.0e.\n", MIN_EPSILON, MAX_EPSILON);
-        }
-    } while (*epsilon < MIN_EPSILON || *epsilon > MAX_EPSILON);
+    return divideComplexNumbers(numerator, denominator);
 }
 
-void getAndValidateY(int *y)
+complex getImpedance3(double resistance1, double resistance2, double inductance, double capacitance, double omega)
 {
-    do
-    {
-        printf("Enter the Y value from %d to %d: ", MIN_Y, MAX_Y);
+    double a = resistance1 * resistance2;
+    double b = resistance1 * (omega * inductance - 1.0 / (omega * capacitance));
+    double c = resistance1 + resistance2;
+    double d = omega * inductance - 1.0 / (omega * capacitance);
 
-        if (scanf("%d", y) != 1)
-        {
-            printf("Invalid input for Y. Please enter a valid number.\n");
-            fflush(stdin);
+    complex numerator;
+    numerator.real = a + b;
+    numerator.imaginary = d;
 
-            continue;
-        }
-        fflush(stdin);
+    complex denominator;
+    denominator.real = c;
+    denominator.imaginary = d;
 
-        if (*y < MIN_Y || *y > MAX_Y)
-        {
-            printf("Y value is out of range. Please enter a value between %d and %d.\n", MIN_Y, MAX_Y);
-        }
-    } while (*y < MIN_Y || *y > MAX_Y);
+    return divideComplexNumbers(numerator, denominator);
 }
 
-bool askToContinue()
+complex getImpedance4(double resistance1, double resistance2, double inductance, double capacitance, double omega)
 {
-    printf("Do you want to run program again? Press 'y' to continue or any other key to exit: ");
+    double a = resistance1 * resistance2;
+    double b = omega * inductance * resistance1 - resistance2 / (omega * capacitance);
+    double c = resistance1 + resistance2;
+    double d = omega * inductance - 1.0 / (omega * capacitance);
 
-    int key = getchar();
-    fflush(stdin);
+    complex numerator;
+    numerator.real = a + inductance / capacitance;
+    numerator.imaginary = b;
 
-    return key == 'y';
-}
+    complex denominator;
+    denominator.real = c;
+    denominator.imaginary = d;
 
-double truncateNumber(double value, int decimalPlaces)
-{
-    double factor = pow(10.0, (double)decimalPlaces);
-
-    return trunc(value * factor) / factor;
-}
-
-int getDecimalPlaces(double epsilon)
-{
-    return -log10(epsilon);
-}
-
-double solveTrigonometricFractionEquation(double x, double y)
-{
-    return cos(y / x) - 2.0 * sin(1.0 / x) + 1.0 / x;
-}
-
-double solveTrigonometricLogarithmEquation(double x, double y)
-{
-    return sin(log(x)) - cos(log(x)) + y * log(x);
-}
-
-double getTrigonometricFractionDerivative(double x, double y)
-{
-    return (solveTrigonometricFractionEquation(x + EPSILON_FOR_NEWTON, y) - solveTrigonometricFractionEquation(x, y)) / EPSILON_FOR_NEWTON;
-}
-
-double getTrigonometricLogarithmDerivative(double x, double y)
-{
-    return (solveTrigonometricLogarithmEquation(x + EPSILON_FOR_NEWTON, y) - solveTrigonometricLogarithmEquation(x, y)) / EPSILON_FOR_NEWTON;
-}
-
-double solveByHalfDividing(double (*equationFunc)(double, double), double rangeStart, double rangeEnd, double y, double epsilon)
-{
-    while (fabs(rangeEnd - rangeStart) > epsilon)
-    {
-        double mid = (rangeStart + rangeEnd) / 2.0;
-
-        if (equationFunc(rangeStart, y) * equationFunc(mid, y) > 0)
-            rangeStart = mid;
-        else
-            rangeEnd = mid;
-    }
-
-    return (rangeStart + rangeEnd) / 2.0;
-}
-
-double solveByNewton(double (*equationFunc)(double, double), double (*derivative)(double, double), double x0, double y, double epsilon)
-{
-    double x1 = 0.0;
-    double delta = 0.0;
-
-    do
-    {
-        delta = equationFunc(x0, y) / derivative(x0, y);
-        x1 = x0 - delta;
-        x0 = x1;
-    } while (fabs(delta) > epsilon);
-
-    return x1;
-}
-
-bool handleContinueWithErrorMessage(char *errorMessage)
-{
-    printf("%s\n", errorMessage);
-    printf("\n");
-
-    return askToContinue();
+    return divideComplexNumbers(numerator, denominator);
 }

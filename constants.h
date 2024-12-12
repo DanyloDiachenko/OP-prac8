@@ -4,16 +4,10 @@
 #define MIN_VALUE 0
 #define MAX_VALUE 1e10
 
-enum ContourType
+typedef struct
 {
-    HALF_DIVIDING = 1,
-    NEWTON = 2,
-};
-
-enum EquationType
-{
-    TRIGONOMETRIC_FRACTIONS = 1,
-    TRIGONOMETRIC_LOGARITHM = 2,
-};
+    double real;
+    double imaginary;
+} complex;
 
 #endif // CONSTANTS_H
