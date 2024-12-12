@@ -1,119 +1,160 @@
-#include "./includes.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+typedef struct
+{
+    double real;
+    double imaginary;
+} complex;
+
+complex divideComplexNumbers(complex complexNumber1, complex complexNumber2)
+{
+    double complexSquare = complexNumber2.real * complexNumber2.real + complexNumber2.imaginary * complexNumber2.imaginary;
+
+    complex result;
+    result.real = (complexNumber1.real * complexNumber2.real + complexNumber1.imaginary * complexNumber2.imaginary) / complexSquare;
+    result.imaginary = (complexNumber1.imaginary * complexNumber2.real - complexNumber1.real * complexNumber2.imaginary) / complexSquare;
+
+    return result;
+}
+
+void printComplexNumber(complex complexNumber)
+{
+    printf("%.6e + i * %.6e", complexNumber.real, complexNumber.imaginary);
+}
+
+double getResonantFrequency(double inductance, double capacitance)
+{
+    return 1.0 / (2 * M_PI * sqrt(inductance * capacitance));
+}
+
+complex getImpedance12(double resistance, double inductance, double capacitance, double omega)
+{
+    complex numerator;
+    numerator.real = inductance / capacitance;
+    numerator.imaginary = -resistance / (omega * capacitance);
+
+    complex denominator;
+    denominator.real = resistance;
+    denominator.imaginary = omega * inductance - 1.0 / (omega * capacitance);
+
+    return divideComplexNumbers(numerator, denominator);
+}
+
+complex getImpedance3(double resistance1, double resistance2, double inductance, double capacitance, double omega)
+{
+    double a = resistance1 * resistance2;
+    double b = resistance1 * (omega * inductance - 1.0 / (omega * capacitance));
+    double c = resistance1 + resistance2;
+    double d = omega * inductance - 1.0 / (omega * capacitance);
+
+    complex numerator;
+    numerator.real = a + b;
+    numerator.imaginary = d;
+
+    complex denominator;
+    denominator.real = c;
+    denominator.imaginary = d;
+
+    return divideComplexNumbers(numerator, denominator);
+}
+
+complex getImpedance4(double resistance1, double resistance2, double inductance, double capacitance, double omega)
+{
+    double a = resistance1 * resistance2;
+    double b = omega * inductance * resistance1 - resistance2 / (omega * capacitance);
+    double c = resistance1 + resistance2;
+    double d = omega * inductance - 1.0 / (omega * capacitance);
+
+    complex numerator;
+    numerator.real = a + inductance / capacitance;
+    numerator.imaginary = b;
+
+    complex denominator;
+    denominator.real = c;
+    denominator.imaginary = d;
+
+    return divideComplexNumbers(numerator, denominator);
+}
 
 int main()
 {
-    bool continueProgram = true;
+    int circuitChoice;
+    double resistance = 0.0;
+    double resistance1 = 0.0;
+    double resistance2 = 0.0;
+    double inductance = 0.0;
+    double capacitance = 0.0;
+    double minFrequency = 0.0;
+    double maxFrequency = 0.0;
+    double frequencyStep = 0.0;
 
-    printf("Welcome! This program solves equations!\n"
-           "1) cos(y/x) - 2sin(1/x) + 1/x = 0\n"
-           "2) sin[ln(x)] - cos[ln(x)] + y*ln(x) = 0\n\n");
+    printf("Select the circuit {1, 2, 3, 4}: ");
+    scanf("%d", &circuitChoice);
+
+    if (circuitChoice < 1 || circuitChoice > 4)
+    {
+        printf("Invalid circuit choice!\n");
+
+        return 0;
+    }
+
+    printf("Enter inductance (mH): ");
+    scanf("%lf", &inductance);
+
+    printf("Enter capacitance (uF): ");
+    scanf("%lf", &capacitance);
+
+    if (circuitChoice == 3 || circuitChoice == 4)
+    {
+        printf("Enter resistance 1 (Ohms): ");
+        scanf("%lf", &resistance1);
+        printf("Enter resistance 2 (Ohms): ");
+        scanf("%lf", &resistance2);
+    }
+    else
+    {
+        printf("Enter resistance (Ohms): ");
+        scanf("%lf", &resistance);
+    }
+
+    printf("Enter min frequency (Hz): ");
+    scanf("%lf", &minFrequency);
+    printf("Enter max frequency (Hz): ");
+    scanf("%lf", &minFrequency);
+    printf("Enter step (Hz): ");
+    scanf("%lf", &frequencyStep);
+
+    double resonantFrequency = getResonantFrequency(inductance, capacitance);
+    printf("Resonant frequency: %.6e Hz\n", resonantFrequency);
+
+    double frequency = minFrequency;
 
     do
     {
-        enum EquationType equationType = 0;
-        enum SolveEquationMethod solvingMethod = 0;
-        double rangeStart = 0.0;
-        double rangeEnd = 0.0;
-        int y = 0;
-        double epsilon = 0.0;
+        double omega = 2.0 * M_PI * frequency;
+        complex impedance;
 
-        getAndValidateEquationType(&equationType);
-        getAndValidateY(&y);
-        getAndValidateRange(&rangeStart, &rangeEnd);
-        getAndValidateEquationSolvingMethod(&solvingMethod);
-        getAndValidateEpsilon(&epsilon);
-
-        if (solvingMethod == 1 && (solveTrigonometricFractionEquation(rangeStart, (double)y) * solveTrigonometricFractionEquation(rangeEnd, (double)y) > 0))
+        if (circuitChoice == 1 || circuitChoice == 2)
         {
-            continueProgram = handleContinueWithErrorMessage("There are no results on this range or their number greater than 1.");
-            if (!continueProgram)
-            {
-                break;
-            };
-
-            continue;
+            impedance = getImpedance12(resistance, inductance, capacitance, omega);
         }
-        if (solvingMethod == 2 && (solveTrigonometricLogarithmEquation(rangeStart, (double)y) * solveTrigonometricLogarithmEquation(rangeEnd, (double)y) > 0))
+        else if (circuitChoice == 3)
         {
-            continueProgram = handleContinueWithErrorMessage("There are no results on this range or their number greater than 1.");
-            if (!continueProgram)
-            {
-                break;
-            };
-
-            continue;
+            impedance = getImpedance3(resistance1, resistance2, inductance, capacitance, omega);
+        }
+        else if (circuitChoice == 4)
+        {
+            impedance = getImpedance4(resistance1, resistance2, inductance, capacitance, omega);
         }
 
-        double (*selectedEquation)(double, double) = NULL;
-        double (*selectedDerivative)(double, double) = NULL;
-
-        switch (equationType)
-        {
-        case TRIGONOMETRIC_FRACTIONS:
-        {
-            selectedEquation = solveTrigonometricFractionEquation;
-            selectedDerivative = getTrigonometricFractionDerivative;
-            break;
-        }
-        case TRIGONOMETRIC_LOGARITHM:
-        {
-            selectedEquation = solveTrigonometricLogarithmEquation;
-            selectedDerivative = getTrigonometricLogarithmDerivative;
-            break;
-        }
-        default:
-        {
-            continueProgram = handleContinueWithErrorMessage("Invalid equation type!");
-            if (!continueProgram)
-            {
-                break;
-            };
-
-            continue;
-        }
-        }
-
-        double result = 0.0;
-
-        switch (solvingMethod)
-        {
-        case HALF_DIVIDING:
-        {
-            result = solveByHalfDividing(selectedEquation, rangeStart, rangeEnd, y, epsilon);
-            break;
-        }
-        case NEWTON:
-        {
-            result = solveByNewton(selectedEquation, selectedDerivative, rangeEnd, y, epsilon);
-            break;
-        }
-            {
-                continueProgram = handleContinueWithErrorMessage("Invalid solving method type!");
-                if (!continueProgram)
-                {
-                    break;
-                };
-
-                continue;
-            }
-        }
-
-        if (isnan(result) || isinf(result))
-        {
-            continueProgram = handleContinueWithErrorMessage("Invalid result is NaN or infinity. Check your input or range and ty agait.");
-            if (!continueProgram)
-            {
-                break;
-            };
-
-            continue;
-        }
-
-        printf("Result: x = %.*lf\n", getDecimalPlaces(epsilon), truncateNumber(result, getDecimalPlaces(epsilon)));
+        printf("%.6e\t", frequency);
+        printComplexNumber(impedance);
         printf("\n");
 
-        continueProgram = askToContinue();
-    } while (continueProgram);
+        frequency += frequencyStep;
+    } while (frequency <= maxFrequency);
 
     return 0;
 }
