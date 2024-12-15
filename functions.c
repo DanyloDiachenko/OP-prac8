@@ -70,7 +70,7 @@ Complex getParallelRLCImpedance(double resistance1, double resistance2, double i
     return divideComplexNumbers(numerator, denominator);
 }
 
-void getAndValidateCircuitChoice(int *circuitChoice)
+void getAndValidateCircuitChoice(unsigned short int *circuitChoice)
 {
     do
     {

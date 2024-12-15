@@ -8,7 +8,7 @@ int main()
 
     do
     {
-        int circuitChoice = 0;
+        unsigned short int circuitChoice = 0;
         double resistance = 0.0;
         double resistance1 = 0.0;
         double resistance2 = 0.0;

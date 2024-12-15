@@ -7,7 +7,7 @@ double getResonantFrequency(double inductance, double capacitance);
 Complex getSeriesLCImpedance(double resistance, double inductance, double capacitance, double omega);
 Complex getParallelRLImpedance(double resistance1, double resistance2, double inductance, double capacitance, double omega);
 Complex getParallelRLCImpedance(double resistance1, double resistance2, double inductance, double capacitance, double omega);
-void getAndValidateCircuitChoice(int *circuitChoice);
+void getAndValidateCircuitChoice(unsigned short int *circuitChoice);
 void getAndValidateInductance(double *inductance);
 void getAndValidateCapacitance(double *capacitance);
 void getAndValidateResistance(double *resistance, const char *resistanceName);
